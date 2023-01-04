@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
 
-CALORIE_GOAL_LIMIT = 1500 #kcal
+CALORIE_GOAL_LIMIT = 2000 #kcal
 PROTEIN_GOAL = 140 #g
 FAT_GOAL = 80 #g
 CARBS_GOAL = 100 #g
@@ -50,6 +50,19 @@ while not done:
         fig, axs = plt.subplots(2, 2)
         axs[0, 0].pie([protein_sum, fats_sum, carbs_sum], labels=["Proteins", "Fats", "Carbs"], autopct="%1.1f%%")
         axs[0, 0].set_title("MacroNutrients Distribution")
-
+        axs[0, 1].bar([0, 1, 2], [protein_sum, fats_sum, carbs_sum], width=0.4)
+        axs[0, 1].bar([0.5, 1.5, 2.5], [PROTEIN_GOAL, FAT_GOAL, CARBS_GOAL], width=0.4)
+        axs[0, 1].set_title("MacroNutrients Progress")
+        axs[1, 0].pie([calorie_sum, CALORIE_GOAL_LIMIT - calorie_sum], labels=["Calories", "Remaining"], autopct="%1.1f%%")
+        axs[1, 0].set_title("Calories Goal Progress")
+        axs[1, 1].plot(list(range(len(today))), np.cumsum([food.calories for food in today]), label="Calories Eaten")
+        axs[1, 1].plot(list(range(len(today))), [CALORIE_GOAL_LIMIT] * len(today), label="Calorie Goal")
+        axs[1, 1].legend()
+        axs[1, 1].set_title("Calories Goal Over Time")
         fig.tight_layout()
         plt.show()
+
+    elif choice == "3":
+        done = True
+    else:
+        print("Invalid Choice!")
